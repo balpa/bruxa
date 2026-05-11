@@ -1,0 +1,137 @@
+name: Bruxa
+
+options:
+  bundleIdPrefix: com.bruxa
+  developmentLanguage: en
+  deploymentTarget:
+    iOS: "17.0"
+    watchOS: "10.0"
+  groupSortPosition: top
+
+packages:
+  BruxaCore:
+    path: BruxaCore
+
+targets:
+  BruxaApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: BruxaApp
+        excludes:
+          - "**/*.entitlements"
+    info:
+      path: BruxaApp/Info.plist
+      properties:
+        UILaunchScreen:
+          UIColorName: ""
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        NSHealthShareUsageDescription: "Bruxa reads your sleep data to time motion recording to the night."
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.bruxa.app
+        TARGETED_DEVICE_FAMILY: "1,2"
+        CODE_SIGN_ENTITLEMENTS: BruxaApp/BruxaApp.entitlements
+        CODE_SIGN_STYLE: Automatic
+        SWIFT_VERSION: "5.10"
+        SUPPORTED_PLATFORMS: "iphonesimulator iphoneos"
+    dependencies:
+      - package: BruxaCore
+
+  BruxaAppTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: BruxaAppTests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.bruxa.app.tests
+        SWIFT_VERSION: "5.10"
+        SUPPORTED_PLATFORMS: "iphonesimulator iphoneos"
+    dependencies:
+      - target: BruxaApp
+      - package: BruxaCore
+
+  BruxaWatch:
+    type: application
+    platform: watchOS
+    deploymentTarget: "10.0"
+    sources:
+      - path: BruxaWatch
+        excludes:
+          - "**/*.entitlements"
+    info:
+      path: BruxaWatch/Info.plist
+      properties:
+        UILaunchStoryboardName: ""
+        WKApplication: true
+        WKWatchOnly: false
+        WKCompanionAppBundleIdentifier: com.bruxa.app
+        WKBackgroundModes:
+          - workout-processing
+        NSHealthShareUsageDescription: "Bruxa reads sleep data to time motion recording to the night."
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.bruxa.watch
+        TARGETED_DEVICE_FAMILY: "4"
+        CODE_SIGN_ENTITLEMENTS: BruxaWatch/BruxaWatch.entitlements
+        CODE_SIGN_STYLE: Automatic
+        SWIFT_VERSION: "5.10"
+        SUPPORTED_PLATFORMS: "watchsimulator watchos"
+    dependencies:
+      - package: BruxaCore
+
+  BruxaWatchTests:
+    type: bundle.unit-test
+    platform: watchOS
+    deploymentTarget: "10.0"
+    sources:
+      - path: BruxaWatchTests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.bruxa.watch.tests
+        SWIFT_VERSION: "5.10"
+        SUPPORTED_PLATFORMS: "watchsimulator watchos"
+    dependencies:
+      - target: BruxaWatch
+      - package: BruxaCore
+
+schemes:
+  BruxaApp:
+    build:
+      targets:
+        BruxaApp: all
+        BruxaAppTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - BruxaAppTests
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+
+  BruxaWatch:
+    build:
+      targets:
+        BruxaWatch: all
+        BruxaWatchTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - BruxaWatchTests
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
