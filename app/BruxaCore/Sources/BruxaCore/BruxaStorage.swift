@@ -28,6 +28,7 @@ public final class BruxaStorage {
     }
 
     public func save(_ episodes: [Episode]) async throws {
+        // FIXME: concurrent calls with overlapping ids can produce duplicate rows because each background context fetches independently. Safe today (Watch produces episodes sequentially); add a unique constraint on `id` and an NSMergeByPropertyObjectTrumpMergePolicy if a second writer is introduced.
         let context = container.newBackgroundContext()
         try await context.perform {
             for ep in episodes {
@@ -50,6 +51,7 @@ public final class BruxaStorage {
         try await fetch(predicate: nil)
     }
 
+    /// Returns episodes whose `start` falls in the half-open interval `[from, to)`.
     public func fetch(from: Date, to: Date) async throws -> [Episode] {
         try await fetch(predicate: NSPredicate(format: "start >= %@ AND start < %@", from as NSDate, to as NSDate))
     }

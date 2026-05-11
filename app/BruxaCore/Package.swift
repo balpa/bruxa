@@ -6,7 +6,7 @@ let package = Package(
     platforms: [
         .iOS(.v17),
         .watchOS(.v10),
-        .macOS(.v13)
+        .macOS(.v13)  // required to run `swift test` on a macOS host
     ],
     products: [
         .library(name: "BruxaCore", targets: ["BruxaCore"])
@@ -14,6 +14,7 @@ let package = Package(
     targets: [
         .target(
             name: "BruxaCore",
+            // Regenerate BruxaModel.momd via scripts/compile-model.sh after editing the xcdatamodeld.
             resources: [
                 .process("BruxaModel.xcdatamodeld"),
                 .copy("BruxaModel.momd")
