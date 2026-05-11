@@ -1,6 +1,6 @@
 import Foundation
+#if os(iOS) || os(watchOS) || os(visionOS)
 import CoreMotion
-import BruxaCore
 
 public final class CoreMotionProvider: MotionProvider {
     private let manager = CMMotionManager()
@@ -32,3 +32,4 @@ public final class CoreMotionProvider: MotionProvider {
         manager.stopDeviceMotionUpdates()
     }
 }
+#endif

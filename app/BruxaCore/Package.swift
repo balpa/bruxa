@@ -14,11 +14,11 @@ let package = Package(
     targets: [
         .target(
             name: "BruxaCore",
-            // Regenerate BruxaModel.momd via scripts/compile-model.sh after editing the xcdatamodeld.
-            resources: [
-                .process("BruxaModel.xcdatamodeld"),
-                .copy("BruxaModel.momd")
-            ]
+            // The .xcdatamodeld is the editable source; the runtime ships only the pre-compiled .momd.
+            // Excluding the source keeps Xcode from auto-compiling it (which would collide with the
+            // shipped .momd). Regenerate BruxaModel.momd via scripts/compile-model.sh after edits.
+            exclude: ["BruxaModel.xcdatamodeld"],
+            resources: [.copy("BruxaModel.momd")]
         ),
         .testTarget(name: "BruxaCoreTests", dependencies: ["BruxaCore"])
     ]
