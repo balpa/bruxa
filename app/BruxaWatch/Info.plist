@@ -20,8 +20,6 @@
 	<string>1</string>
 	<key>NSHealthShareUsageDescription</key>
 	<string>Bruxa reads sleep data to time motion recording to the night.</string>
-	<key>UILaunchStoryboardName</key>
-	<string></string>
 	<key>WKApplication</key>
 	<true/>
 	<key>WKBackgroundModes</key>

@@ -24,8 +24,6 @@ targets:
     info:
       path: BruxaApp/Info.plist
       properties:
-        UILaunchScreen:
-          UIColorName: ""
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         NSHealthShareUsageDescription: "Bruxa reads your sleep data to time motion recording to the night."
@@ -66,7 +64,6 @@ targets:
     info:
       path: BruxaWatch/Info.plist
       properties:
-        UILaunchStoryboardName: ""
         WKApplication: true
         WKWatchOnly: false
         WKCompanionAppBundleIdentifier: com.bruxa.app
