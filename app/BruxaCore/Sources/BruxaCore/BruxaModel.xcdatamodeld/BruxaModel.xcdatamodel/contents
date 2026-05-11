@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22760" systemVersion="24A335" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="EpisodeEntity" representedClassName="EpisodeEntity" syncable="YES">
+        <attribute name="end" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="intensity" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isCalibration" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="start" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
+</model>
