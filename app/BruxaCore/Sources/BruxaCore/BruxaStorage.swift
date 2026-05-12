@@ -74,3 +74,42 @@ public final class BruxaStorage {
         }
     }
 }
+
+extension BruxaStorage {
+    public func save(arousalEvents events: [ArousalEvent]) async throws {
+        let context = container.newBackgroundContext()
+        try await context.perform {
+            for event in events {
+                let request = NSFetchRequest<NSManagedObject>(entityName: "ArousalEventEntity")
+                request.predicate = NSPredicate(format: "id == %@", event.id as CVarArg)
+                request.fetchLimit = 1
+                let existing = try context.fetch(request).first
+                let row = existing ?? NSEntityDescription.insertNewObject(forEntityName: "ArousalEventEntity", into: context)
+                row.setValue(event.id, forKey: "id")
+                row.setValue(event.start, forKey: "start")
+                row.setValue(event.end, forKey: "end")
+                row.setValue(event.peakBPM, forKey: "peakBPM")
+                row.setValue(event.baselineBPM, forKey: "baselineBPM")
+            }
+            try context.save()
+        }
+    }
+
+    public func fetchArousalEvents(from: Date, to: Date) async throws -> [ArousalEvent] {
+        let context = container.newBackgroundContext()
+        return try await context.perform {
+            let request = NSFetchRequest<NSManagedObject>(entityName: "ArousalEventEntity")
+            request.predicate = NSPredicate(format: "start >= %@ AND start < %@", from as NSDate, to as NSDate)
+            request.sortDescriptors = [NSSortDescriptor(key: "start", ascending: true)]
+            let rows = try context.fetch(request)
+            return rows.compactMap { row in
+                guard let id = row.value(forKey: "id") as? UUID,
+                      let start = row.value(forKey: "start") as? Date,
+                      let end = row.value(forKey: "end") as? Date,
+                      let peakBPM = row.value(forKey: "peakBPM") as? Double,
+                      let baselineBPM = row.value(forKey: "baselineBPM") as? Double else { return nil }
+                return ArousalEvent(id: id, start: start, end: end, peakBPM: peakBPM, baselineBPM: baselineBPM)
+            }
+        }
+    }
+}

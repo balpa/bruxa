@@ -40,3 +40,24 @@ final class BruxaStorageTests: XCTestCase {
         XCTAssertEqual(result, [inside])
     }
 }
+
+extension BruxaStorageTests {
+    func test_saveAndFetchArousalEvents() async throws {
+        let storage = try BruxaStorage(inMemory: true)
+        let event = ArousalEvent(id: UUID(), start: Date(timeIntervalSince1970: 100), end: Date(timeIntervalSince1970: 120), peakBPM: 95, baselineBPM: 60)
+        try await storage.save(arousalEvents: [event])
+        let fetched = try await storage.fetchArousalEvents(from: Date(timeIntervalSince1970: 50), to: Date(timeIntervalSince1970: 200))
+        XCTAssertEqual(fetched, [event])
+    }
+
+    func test_arousalEventSaveIsIdempotentById() async throws {
+        let storage = try BruxaStorage(inMemory: true)
+        let id = UUID()
+        let first = ArousalEvent(id: id, start: Date(timeIntervalSince1970: 100), end: Date(timeIntervalSince1970: 110), peakBPM: 90, baselineBPM: 60)
+        let updated = ArousalEvent(id: id, start: Date(timeIntervalSince1970: 100), end: Date(timeIntervalSince1970: 115), peakBPM: 99, baselineBPM: 60)
+        try await storage.save(arousalEvents: [first])
+        try await storage.save(arousalEvents: [updated])
+        let all = try await storage.fetchArousalEvents(from: .distantPast, to: .distantFuture)
+        XCTAssertEqual(all, [updated])
+    }
+}
