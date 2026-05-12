@@ -1,16 +1,21 @@
 import SwiftUI
+import BruxaCore
 
 @main
 struct BruxaAppApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
-    }
-}
+    private let storage: BruxaStorage = {
+        do { return try BruxaStorage() }
+        catch { fatalError("Storage init failed: \(error)") }
+    }()
 
-struct ContentView: View {
-    var body: some View {
-        Text("Bruxa")
+    private let receiver: LiveWCReceiver
+
+    init() {
+        let coord = PhoneConnectivityCoordinator(storage: storage)
+        self.receiver = LiveWCReceiver(coordinator: coord)
+    }
+
+    var body: some Scene {
+        WindowGroup { RootView(storage: storage) }
     }
 }
