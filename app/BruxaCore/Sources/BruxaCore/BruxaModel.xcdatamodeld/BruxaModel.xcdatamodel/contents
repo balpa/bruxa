@@ -7,4 +7,16 @@
         <attribute name="isCalibration" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="start" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
+    <entity name="ArousalEventEntity" representedClassName="ArousalEventEntity" syncable="YES">
+        <attribute name="baselineBPM" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="end" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="peakBPM" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="start" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
+    <entity name="SelfReportEntity" representedClassName="SelfReportEntity" syncable="YES">
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="jawSoreness" attributeType="String"/>
+    </entity>
 </model>
