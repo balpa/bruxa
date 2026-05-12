@@ -9,6 +9,7 @@ struct BruxaAppApp: App {
     }()
 
     private let receiver: LiveWCReceiver
+    @AppStorage("bruxa.disclosure.accepted") private var hasAcceptedDisclosure: Bool = false
 
     init() {
         let coord = PhoneConnectivityCoordinator(storage: storage)
@@ -16,6 +17,15 @@ struct BruxaAppApp: App {
     }
 
     var body: some Scene {
-        WindowGroup { RootView(storage: storage) }
+        WindowGroup {
+            if hasAcceptedDisclosure {
+                RootView(storage: storage)
+            } else {
+                DisclosureView(hasAccepted: Binding(
+                    get: { hasAcceptedDisclosure },
+                    set: { hasAcceptedDisclosure = $0 }
+                ))
+            }
+        }
     }
 }
