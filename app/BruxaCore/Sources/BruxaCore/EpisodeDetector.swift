@@ -1,7 +1,7 @@
 import Foundation
 
 public protocol EpisodeDetector {
-    /// Returns an Episode if the window contains a detected bruxism episode, otherwise nil.
+    /// Returns an Episode if the window matches the jaw-activity candidate pattern, otherwise nil.
     func detect(window: [SensorSample], windowStart: Date) -> Episode?
 }
 

@@ -23,7 +23,7 @@ public struct MorningReportBuilder: @unchecked Sendable {
     private let storage: BruxaStorage
     private let nightWindowHours: TimeInterval
 
-    public init(storage: BruxaStorage, nightWindowHours: TimeInterval = 6) {
+    public init(storage: BruxaStorage, nightWindowHours: TimeInterval = 12) {
         self.storage = storage
         self.nightWindowHours = nightWindowHours
     }
