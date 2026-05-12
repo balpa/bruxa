@@ -3,25 +3,36 @@ import BruxaCore
 
 struct StatusView: View {
     @State private var todayCount: Int = 0
-    @State private var isRecording: Bool = false
+    @State private var showingPrompt: Bool = false
+    @State private var lastReport: SelfReport?
     private let storage: BruxaStorage
 
     init(storage: BruxaStorage) { self.storage = storage }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(isRecording ? "Recording" : "Idle")
+            Text("Bruxa")
                 .font(.headline)
-                .foregroundStyle(isRecording ? .green : .secondary)
-            Text("Episodes tonight: \(todayCount)")
+            Text("Jaw indicators tonight: \(todayCount)")
                 .font(.subheadline)
             Spacer()
-            Text("Open the iPhone app for reports.")
+            Button(action: { showingPrompt = true }) {
+                Text(lastReport == nil ? "Log this morning" : "Update report")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.bordered)
+            Text("Open the iPhone app for the full report.")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }
         .padding()
         .task { await refresh() }
+        .sheet(isPresented: $showingPrompt) {
+            SelfReportPromptView(storage: storage, onDone: {
+                showingPrompt = false
+                Task { await refresh() }
+            })
+        }
     }
 
     private func refresh() async {
@@ -32,8 +43,11 @@ struct StatusView: View {
         do {
             let eps = try await storage.fetch(from: start, to: end)
             todayCount = eps.count
+            let reports = try await storage.fetchSelfReports(from: cal.startOfDay(for: now), to: now)
+            lastReport = reports.last
         } catch {
             todayCount = 0
+            lastReport = nil
         }
     }
 }
