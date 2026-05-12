@@ -16,6 +16,7 @@
 		8583E861BB75B8D2EC658EA1 /* BruxaCore in Frameworks */ = {isa = PBXBuildFile; productRef = B702FEFDA1956798C46CA41A /* BruxaCore */; };
 		9DC7A4875E51274D26CBB9BC /* DisclosureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E376784D2F93D0C92C95E892 /* DisclosureView.swift */; };
 		E2CF5BEF851430709445316D /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCC1A5C47C99DDA00D3BA1A /* RootView.swift */; };
+		EE1021EB8AD8312CCC398096 /* SelfReportPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3824924D982D86934F1AEE /* SelfReportPromptView.swift */; };
 		F2B2017A9828FC236A59318D /* BruxaCore in Frameworks */ = {isa = PBXBuildFile; productRef = EA4428718FFFED390CDCF87B /* BruxaCore */; };
 		FCC548E1589CE3D75EA57A4B /* BruxaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9E3EA08AAB2E6B36771464C3 /* BruxaCore */; };
 /* End PBXBuildFile section */
@@ -39,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		0968E93581B8E96C3384346E /* BruxaCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BruxaCore; path = BruxaCore; sourceTree = SOURCE_ROOT; };
+		0D3824924D982D86934F1AEE /* SelfReportPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfReportPromptView.swift; sourceTree = "<group>"; };
 		20EEF808EBB0E39C5AF7D621 /* BruxaAppTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = BruxaAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F9CB1F4B5B6F56DD15AF21F /* BruxaWatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BruxaWatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B7B3D1083974F95EE896612 /* BruxaApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BruxaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -161,6 +163,7 @@
 		D53199B2A7E22708D45FD5CA /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				0D3824924D982D86934F1AEE /* SelfReportPromptView.swift */,
 				96382B97412ED84540AEE035 /* StatusView.swift */,
 			);
 			path = UI;
@@ -303,6 +306,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0E20283A330AB659D29D9632 /* BruxaWatchApp.swift in Sources */,
+				EE1021EB8AD8312CCC398096 /* SelfReportPromptView.swift in Sources */,
 				1DF4C21ED20659D15041AEEE /* StatusView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
