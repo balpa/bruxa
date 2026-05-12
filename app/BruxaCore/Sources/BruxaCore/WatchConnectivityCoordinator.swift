@@ -18,10 +18,10 @@ public final class WatchConnectivityCoordinator: Sendable {
         self.deviceID = deviceID
     }
 
-    public func send(episodes: [Episode]) throws {
-        guard !episodes.isEmpty else { return }
+    public func send(episodes: [Episode], arousalEvents: [ArousalEvent] = []) throws {
+        guard !episodes.isEmpty || !arousalEvents.isEmpty else { return }
 
-        let batch = EpisodesBatch(deviceID: deviceID, episodes: episodes)
+        let batch = NightDataBatch(deviceID: deviceID, episodes: episodes, arousalEvents: arousalEvents)
         let data = try batch.encoded()
         session.transfer(data)
     }

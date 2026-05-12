@@ -29,9 +29,11 @@ struct BruxaWatchApp: App {
         Task {
             let from = Date().addingTimeInterval(-36 * 3600)
             let to = Date()
-            if let episodes = try? await storageRef.fetch(from: from, to: to) {
-                try? connectivityRef.send(episodes: episodes)
-            }
+            async let episodesTask = try? await storageRef.fetch(from: from, to: to)
+            async let arousalsTask = try? await storageRef.fetchArousalEvents(from: from, to: to)
+            let episodes = await episodesTask ?? []
+            let arousals = await arousalsTask ?? []
+            try? connectivityRef.send(episodes: episodes, arousalEvents: arousals)
         }
     }
 

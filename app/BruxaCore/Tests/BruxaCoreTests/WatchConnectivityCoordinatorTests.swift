@@ -14,7 +14,7 @@ final class WatchConnectivityCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(fakeSession.transferredData.count, 1)
 
-        let decodedBatch = try EpisodesBatch.decoded(from: fakeSession.transferredData[0])
+        let decodedBatch = try NightDataBatch.decoded(from: fakeSession.transferredData[0])
         XCTAssertEqual(decodedBatch.deviceID, "watch-1")
         XCTAssertEqual(decodedBatch.episodes.count, 1)
         XCTAssertEqual(decodedBatch.episodes[0], episodes[0])
@@ -24,9 +24,31 @@ final class WatchConnectivityCoordinatorTests: XCTestCase {
         let fakeSession = FakeWCSession()
         let coordinator = WatchConnectivityCoordinator(session: fakeSession, deviceID: "watch-1")
 
-        try coordinator.send(episodes: [])
+        try coordinator.send(episodes: [], arousalEvents: [])
 
         XCTAssertEqual(fakeSession.transferredData.count, 0)
+    }
+
+    func test_sendsArousalsOnlyBatch() throws {
+        let fakeSession = FakeWCSession()
+        let coordinator = WatchConnectivityCoordinator(session: fakeSession, deviceID: "watch-1")
+
+        let arousal = ArousalEvent(
+            id: UUID(),
+            start: .now,
+            end: .now.addingTimeInterval(30),
+            peakBPM: 95.0,
+            baselineBPM: 60.0
+        )
+
+        try coordinator.send(episodes: [], arousalEvents: [arousal])
+
+        XCTAssertEqual(fakeSession.transferredData.count, 1)
+
+        let decodedBatch = try NightDataBatch.decoded(from: fakeSession.transferredData[0])
+        XCTAssertEqual(decodedBatch.episodes.count, 0)
+        XCTAssertEqual(decodedBatch.arousalEvents.count, 1)
+        XCTAssertEqual(decodedBatch.arousalEvents[0], arousal)
     }
 }
 

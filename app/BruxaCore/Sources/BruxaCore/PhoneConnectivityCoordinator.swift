@@ -16,8 +16,9 @@ public final class PhoneConnectivityCoordinator: Sendable {
             return
         }
 
-        let batch = try EpisodesBatch.decoded(from: data)
+        let batch = try NightDataBatch.decoded(from: data)
         try await storage.save(batch.episodes)
+        try await storage.save(arousalEvents: batch.arousalEvents)
     }
 }
 
