@@ -1,32 +1,45 @@
 import Foundation
 
-public protocol HealthAuthorizing {
-    func requestAuthorization(readIdentifiers: [String]) async throws
+public enum HealthReadType: String, Codable, Hashable, Sendable, CaseIterable {
+    case sleepAnalysis
+    case heartRate
 }
 
-public final class SleepAuthorizationCoordinator {
+public protocol HealthAuthorizing: Sendable {
+    func requestAuthorization(readTypes: [HealthReadType]) async throws
+}
+
+public final class SleepAuthorizationCoordinator: Sendable {
     private let authorizer: HealthAuthorizing
 
     public init(authorizer: HealthAuthorizing) {
         self.authorizer = authorizer
     }
 
-    public func requestSleepReadAccess() async throws {
-        try await authorizer.requestAuthorization(readIdentifiers: ["HKCategoryTypeIdentifierSleepAnalysis"])
+    public func requestSleepAndHeartRateReadAccess() async throws {
+        try await authorizer.requestAuthorization(readTypes: [.sleepAnalysis, .heartRate])
     }
 }
 
 #if (os(iOS) || os(watchOS)) && canImport(HealthKit)
 import HealthKit
 
-public final class LiveHealthAuthorizer: HealthAuthorizing {
+public final class LiveHealthAuthorizer: HealthAuthorizing, @unchecked Sendable {
     private let store = HKHealthStore()
 
     public init() {}
 
-    public func requestAuthorization(readIdentifiers: [String]) async throws {
-        let types = readIdentifiers.compactMap { HKObjectType.categoryType(forIdentifier: HKCategoryTypeIdentifier(rawValue: $0)) }
-        try await store.requestAuthorization(toShare: [], read: Set(types))
+    public func requestAuthorization(readTypes: [HealthReadType]) async throws {
+        var types: Set<HKObjectType> = []
+        for readType in readTypes {
+            switch readType {
+            case .sleepAnalysis:
+                if let t = HKObjectType.categoryType(forIdentifier: .sleepAnalysis) { types.insert(t) }
+            case .heartRate:
+                if let t = HKObjectType.quantityType(forIdentifier: .heartRate) { types.insert(t) }
+            }
+        }
+        try await store.requestAuthorization(toShare: [], read: types)
     }
 }
 #endif

@@ -2,20 +2,17 @@ import XCTest
 @testable import BruxaCore
 
 final class SleepAuthorizationCoordinatorTests: XCTestCase {
-    func test_requestForwardsToAuthorizer() async throws {
-        let mockAuthorizer = MockHealthAuthorizer()
-        let coordinator = SleepAuthorizationCoordinator(authorizer: mockAuthorizer)
-
-        try await coordinator.requestSleepReadAccess()
-
-        XCTAssertEqual(mockAuthorizer.readTypeIdentifiers, ["HKCategoryTypeIdentifierSleepAnalysis"])
+    func test_requestSleepAndHeartRateForwardsBothScopes() async throws {
+        let mock = MockHealthAuthorizer()
+        let coord = SleepAuthorizationCoordinator(authorizer: mock)
+        try await coord.requestSleepAndHeartRateReadAccess()
+        XCTAssertEqual(Set(mock.requestedTypes), [.sleepAnalysis, .heartRate])
     }
 }
 
 private final class MockHealthAuthorizer: HealthAuthorizing {
-    private(set) var readTypeIdentifiers: [String] = []
-
-    func requestAuthorization(readIdentifiers: [String]) async throws {
-        readTypeIdentifiers = readIdentifiers
+    var requestedTypes: [HealthReadType] = []
+    func requestAuthorization(readTypes: [HealthReadType]) async throws {
+        requestedTypes = readTypes
     }
 }
