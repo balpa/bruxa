@@ -46,3 +46,34 @@ private struct AlwaysHitDetector: EpisodeDetector {
         )
     }
 }
+
+extension SleepSessionManagerTests {
+    func test_arousalDetectionRunsOnSleepEndAndPersists() async throws {
+        let scriptedSleep = ScriptedSleepStateProvider()
+        let storage = try BruxaStorage(inMemory: true)
+        let onset = Date()
+        // 17 samples spanning ~0.8 s: first 5 at 60 bpm (baseline), next 12 at 80 bpm (elevated).
+        let hrSamples = (0..<17).map { i in
+            HeartRateSample(timestamp: onset.addingTimeInterval(Double(i) * 0.05), bpm: i < 5 ? 60 : 80)
+        }
+        let hrProvider = ScriptedHeartRateSampleProvider(samples: hrSamples)
+        let detector = ArousalDetector(relativeThreshold: 0.25, minDurationSeconds: 0.3, baselineWindowSeconds: 0.3)
+        let manager = SleepSessionManager(
+            sleep: scriptedSleep,
+            recorderFactory: { SensorRecorder(motion: ScriptedMotionProvider(samples: []), sampleRateHz: 50, windowSeconds: 30) },
+            detector: StubEpisodeDetector(),
+            storage: storage,
+            heartRateProvider: hrProvider,
+            arousalDetector: detector
+        )
+        manager.start()
+        scriptedSleep.emit(.asleep)
+        // Real elapsed time so the HR window [lastSleepStart, Date()] actually contains the synthetic samples.
+        try await Task.sleep(nanoseconds: 1_200_000_000)
+        scriptedSleep.emit(.awake)
+        // Allow the awake handler's async work to drain.
+        try await Task.sleep(nanoseconds: 300_000_000)
+        let arousals = try await storage.fetchArousalEvents(from: .distantPast, to: .distantFuture)
+        XCTAssertEqual(arousals.count, 1)
+    }
+}
