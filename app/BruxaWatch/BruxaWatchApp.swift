@@ -20,8 +20,10 @@ struct BruxaWatchApp: App {
         self.manager = SleepSessionManager(
             sleep: HealthKitSleepStateProvider(),
             recorderFactory: motionFactory,
-            detector: StubEpisodeDetector(),
-            storage: storageRef
+            detector: BandPassJawActivityDetector(),
+            storage: storageRef,
+            heartRateProvider: HealthKitHeartRateSampleProvider(),
+            arousalDetector: ArousalDetector()
         )
         manager.start()
         Task {
