@@ -19,7 +19,7 @@ final class MorningReportBuilderTests: XCTestCase {
             SelfReport(id: UUID(), date: date, jawSoreness: .yes)
         ])
 
-        let report = try await MorningReportBuilder(storage: storage).build(forMorningOf: date)
+        let report = try await MorningReportBuilder(storage: storage, nightWindowHours: 6).build(forMorningOf: date)
 
         XCTAssertEqual(report.jawActivityIndicatorCount, 2)
         XCTAssertEqual(report.arousalEventCount, 1)
