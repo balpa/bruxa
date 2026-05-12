@@ -1,6 +1,10 @@
 # Bruxa — Claude project notes
 
-Apple Watch app that records wrist motion overnight and reports jaw-clenching (bruxism) episodes. iPhone companion shows the detailed report.
+Apple Watch + iPhone sleep-wellness companion. Tracks restless minutes, HR-arousal events, and a jaw-clench indicator. **Not** a bruxism diagnostic tool — see `docs/superpowers/specs/2026-05-12-bruxa-rescoped-design.md` for the re-scoped positioning.
+
+## Honest claims policy
+
+The product is wellness, not medical. In code, in docs, in commit messages: prefer "indicator," "track," "candidate," "pattern." Avoid "detect," "diagnose," "bruxism episode" as user-facing strings — those terms inside `BruxaCore` (e.g. `Episode`, `EpisodeDetector`) are internal-only and were kept to avoid churn; their user-facing presentation must remain hedged.
 
 ## Repository conventions
 

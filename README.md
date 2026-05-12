@@ -2,14 +2,16 @@
 
 Apple Watch app that records overnight wrist motion and reports sleep bruxism (jaw-clenching) episodes. An iPhone companion app shows the detailed report.
 
-> **Status:** early development. Foundation in place; the bruxism detector is currently a stub awaiting a dataset decision (EMG-splint pilot vs heuristic MVP).
+> **Status:** v1 in development. Heuristic band-pass jaw-activity detector + HR-arousal detection landed. Morning report shows restless minutes, arousal events, and jaw activity indicator. Not a medical device — see the [re-scoped design](docs/superpowers/specs/2026-05-12-bruxa-rescoped-design.md).
 
 ## What it does
 
 - Listens to HealthKit sleep state on the Watch and only records while the user is asleep.
 - Buffers 50 Hz accelerometer + gyroscope data into 30-second windows.
 - Runs each window through an `EpisodeDetector` and persists detected episodes locally (CoreData).
+- Tracks HR-spike arousal events during sleep using HealthKit heart rate samples.
 - Syncs episode batches from Watch to iPhone over WatchConnectivity (in progress).
+- Captures a morning self-report (jaw soreness yes/no/unsure) via the Watch app.
 - Renders a per-night report with episode count, intensity, timeline, and sleep-stage overlay (planned).
 
 All processing is on-device; nothing is uploaded.
