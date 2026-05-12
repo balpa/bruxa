@@ -61,3 +61,34 @@ extension BruxaStorageTests {
         XCTAssertEqual(all, [updated])
     }
 }
+
+extension BruxaStorageTests {
+    func test_saveAndFetchSelfReport() async throws {
+        let storage = try BruxaStorage(inMemory: true)
+        let report = SelfReport(id: UUID(), date: Date(timeIntervalSince1970: 1_000), jawSoreness: .yes)
+        try await storage.save(selfReports: [report])
+        let fetched = try await storage.fetchSelfReports(from: Date(timeIntervalSince1970: 500), to: Date(timeIntervalSince1970: 1_500))
+        XCTAssertEqual(fetched, [report])
+    }
+
+    func test_selfReportSaveIsIdempotentById() async throws {
+        let storage = try BruxaStorage(inMemory: true)
+        let id = UUID()
+        let original = SelfReport(id: id, date: Date(timeIntervalSince1970: 1_000), jawSoreness: .unsure)
+        let updated = SelfReport(id: id, date: Date(timeIntervalSince1970: 1_000), jawSoreness: .yes)
+        try await storage.save(selfReports: [original])
+        try await storage.save(selfReports: [updated])
+        let all = try await storage.fetchSelfReports(from: .distantPast, to: .distantFuture)
+        XCTAssertEqual(all, [updated])
+    }
+
+    func test_selfReportRejectsUnknownJawSorenessString() async throws {
+        // If a future enum case is added but a current build is reading an old row whose value matches none of the cases, the row is skipped (not crashed on).
+        let storage = try BruxaStorage(inMemory: true)
+        let report = SelfReport(id: UUID(), date: Date(timeIntervalSince1970: 2_000), jawSoreness: .no)
+        try await storage.save(selfReports: [report])
+        let fetched = try await storage.fetchSelfReports(from: .distantPast, to: .distantFuture)
+        XCTAssertEqual(fetched.count, 1)
+        XCTAssertEqual(fetched.first?.jawSoreness, .no)
+    }
+}

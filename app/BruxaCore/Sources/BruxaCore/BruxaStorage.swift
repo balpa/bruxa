@@ -113,3 +113,39 @@ extension BruxaStorage {
         }
     }
 }
+
+extension BruxaStorage {
+    public func save(selfReports reports: [SelfReport]) async throws {
+        let context = container.newBackgroundContext()
+        try await context.perform {
+            for report in reports {
+                let request = NSFetchRequest<NSManagedObject>(entityName: "SelfReportEntity")
+                request.predicate = NSPredicate(format: "id == %@", report.id as CVarArg)
+                request.fetchLimit = 1
+                let existing = try context.fetch(request).first
+                let row = existing ?? NSEntityDescription.insertNewObject(forEntityName: "SelfReportEntity", into: context)
+                row.setValue(report.id, forKey: "id")
+                row.setValue(report.date, forKey: "date")
+                row.setValue(report.jawSoreness.rawValue, forKey: "jawSoreness")
+            }
+            try context.save()
+        }
+    }
+
+    public func fetchSelfReports(from: Date, to: Date) async throws -> [SelfReport] {
+        let context = container.newBackgroundContext()
+        return try await context.perform {
+            let request = NSFetchRequest<NSManagedObject>(entityName: "SelfReportEntity")
+            request.predicate = NSPredicate(format: "date >= %@ AND date < %@", from as NSDate, to as NSDate)
+            request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+            let rows = try context.fetch(request)
+            return rows.compactMap { row in
+                guard let id = row.value(forKey: "id") as? UUID,
+                      let date = row.value(forKey: "date") as? Date,
+                      let rawSoreness = row.value(forKey: "jawSoreness") as? String,
+                      let soreness = JawSoreness(rawValue: rawSoreness) else { return nil }
+                return SelfReport(id: id, date: date, jawSoreness: soreness)
+            }
+        }
+    }
+}
