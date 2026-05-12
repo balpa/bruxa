@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0E20283A330AB659D29D9632 /* BruxaWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C6C6103AFF34679AC1E6D3 /* BruxaWatchApp.swift */; };
 		14C3333FDAE613151DAA19E6 /* BruxaAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75145EE0A25E3F422F83901 /* BruxaAppTests.swift */; };
+		1DF4C21ED20659D15041AEEE /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96382B97412ED84540AEE035 /* StatusView.swift */; };
 		2F5CD1ED5A2105514EF339E9 /* BruxaWatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB041A71233980A637F7B36 /* BruxaWatchTests.swift */; };
 		69E9F22A46FA663BF69C21B0 /* BruxaAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77957791AB3056F310A910EB /* BruxaAppApp.swift */; };
 		7BF075446D28ED3227903B75 /* BruxaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 3D1928DD1073056E7DAD6CF2 /* BruxaCore */; };
@@ -41,6 +42,7 @@
 		4F9CB1F4B5B6F56DD15AF21F /* BruxaWatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BruxaWatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B7B3D1083974F95EE896612 /* BruxaApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BruxaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		77957791AB3056F310A910EB /* BruxaAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BruxaAppApp.swift; sourceTree = "<group>"; };
+		96382B97412ED84540AEE035 /* StatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
 		AA8E1E043AE59BA027E61AE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B75145EE0A25E3F422F83901 /* BruxaAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BruxaAppTests.swift; sourceTree = "<group>"; };
 		C47DB7AE536AC2CDAB49CAD0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 		A10B320CE66B865B98027D4A /* BruxaWatch */ = {
 			isa = PBXGroup;
 			children = (
+				D53199B2A7E22708D45FD5CA /* UI */,
 				D8C6C6103AFF34679AC1E6D3 /* BruxaWatchApp.swift */,
 				C47DB7AE536AC2CDAB49CAD0 /* Info.plist */,
 			);
@@ -150,6 +153,14 @@
 				AA8E1E043AE59BA027E61AE4 /* Info.plist */,
 			);
 			path = BruxaApp;
+			sourceTree = "<group>";
+		};
+		D53199B2A7E22708D45FD5CA /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				96382B97412ED84540AEE035 /* StatusView.swift */,
+			);
+			path = UI;
 			sourceTree = "<group>";
 		};
 		E1566FA66BA686582CD892B4 /* Packages */ = {
@@ -289,6 +300,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0E20283A330AB659D29D9632 /* BruxaWatchApp.swift in Sources */,
+				1DF4C21ED20659D15041AEEE /* StatusView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
