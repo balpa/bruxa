@@ -19,7 +19,7 @@ public struct MorningReport: Equatable, Sendable {
     }
 }
 
-public struct MorningReportBuilder: Sendable {
+public struct MorningReportBuilder: @unchecked Sendable {
     private let storage: BruxaStorage
     private let nightWindowHours: TimeInterval
 
